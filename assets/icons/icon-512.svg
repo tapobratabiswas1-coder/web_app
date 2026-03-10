@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#4f46e5"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <!-- Sun -->
+  <circle cx="210" cy="180" r="52" fill="#FBBF24"/>
+  <g stroke="#FBBF24" stroke-width="8" stroke-linecap="round" opacity="0.8">
+    <line x1="210" y1="108" x2="210" y2="122"/>
+    <line x1="210" y1="238" x2="210" y2="252"/>
+    <line x1="138" y1="180" x2="152" y2="180"/>
+    <line x1="268" y1="180" x2="282" y2="180"/>
+    <line x1="159" y1="129" x2="169" y2="139"/>
+    <line x1="251" y1="221" x2="261" y2="231"/>
+    <line x1="159" y1="231" x2="169" y2="221"/>
+    <line x1="251" y1="139" x2="261" y2="129"/>
+  </g>
+  <!-- Cloud -->
+  <ellipse cx="270" cy="295" rx="100" ry="60" fill="white" opacity="0.9"/>
+  <ellipse cx="220" cy="300" rx="75" ry="55" fill="white" opacity="0.95"/>
+  <ellipse cx="320" cy="305" rx="68" ry="48" fill="white" opacity="0.88"/>
+  <ellipse cx="270" cy="320" rx="120" ry="40" fill="white" opacity="0.92"/>
+  <!-- Rain drops -->
+  <g stroke="white" stroke-width="6" stroke-linecap="round" opacity="0.7">
+    <line x1="230" y1="358" x2="222" y2="390"/>
+    <line x1="270" y1="362" x2="262" y2="394"/>
+    <line x1="310" y1="356" x2="302" y2="388"/>
+  </g>
+</svg>

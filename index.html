@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en" data-theme="dark" data-condition="clear-day">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Premium real-time weather application with detailed forecasts, interactive maps, hourly & 7-day outlook, air quality index, and customisable themes." />
+  <meta name="keywords" content="weather, forecast, live weather, weather app, air quality, temperature, rain, wind" />
+  <meta name="author" content="Tapobrata" />
+  <meta name="theme-color" content="#3b82f6" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Weather App — Live Forecast" />
+  <meta property="og:description"
+    content="Beautiful real-time weather with hourly & 7-day forecasts, interactive map, and air quality data." />
+  <meta property="og:type" content="website" />
+
+  <title>Weather App — Live Forecast</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="assets/icons/icon-192.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.svg" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+
+  <!-- Leaflet (free map) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <!-- WEATHER BACKGROUND EFFECTS (rain drops, stars, etc.)-->
+  <div class="weather-bg-effects" id="weatherBgEffects" aria-hidden="true"></div>
+
+  <!--TOAST / NOTIFICATION-->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!--NAVBAR-->
+  <nav class="navbar" id="navbar">
+    <div class="navbar__inner">
+      <!-- Logo -->
+      <a href="#" class="navbar__logo" aria-label="Weather App Home">
+        <svg class="navbar__logo-icon" viewBox="0 0 32 32" width="28" height="28" fill="none">
+          <circle cx="16" cy="16" r="6" fill="currentColor" opacity="0.9" />
+          <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="16" y1="26" x2="16" y2="30" />
+            <line x1="2" y1="16" x2="6" y2="16" />
+            <line x1="26" y1="16" x2="30" y2="16" />
+            <line x1="6.1" y1="6.1" x2="8.9" y2="8.9" />
+            <line x1="23.1" y1="23.1" x2="25.9" y2="25.9" />
+            <line x1="6.1" y1="25.9" x2="8.9" y2="23.1" />
+            <line x1="23.1" y1="8.9" x2="25.9" y2="6.1" />
+          </g>
+        </svg>
+        <span class="navbar__title">Weather</span>
+      </a>
+
+      <!-- Search -->
+      <div class="search" id="searchWrapper">
+        <div class="search__input-group">
+          <svg class="search__icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input type="text" class="search__input" id="searchInput" placeholder="Search any city…" autocomplete="off"
+            aria-label="Search city" />
+          <button class="search__clear" id="searchClear" aria-label="Clear search" hidden>
+            &times;
+          </button>
+        </div>
+        <ul class="search__results" id="searchResults" role="listbox" hidden></ul>
+      </div>
+
+      <!-- Controls -->
+      <div class="navbar__controls">
+        <button class="btn-icon" id="btnMyLocation" aria-label="Use my location" title="Use my location">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4" />
+            <line x1="12" y1="2" x2="12" y2="6" />
+            <line x1="12" y1="18" x2="12" y2="22" />
+            <line x1="2" y1="12" x2="6" y2="12" />
+            <line x1="18" y1="12" x2="22" y2="12" />
+          </svg>
+        </button>
+        <button class="btn-icon btn-unit-toggle" id="btnUnitToggle" aria-label="Toggle temperature unit"
+          title="Toggle °C / °F">
+          °C
+        </button>
+        <button class="btn-icon" id="btnThemeToggle" aria-label="Toggle dark/light theme" title="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5" />
+            <line x1="12" y1="1" x2="12" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="23" />
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+            <line x1="1" y1="12" x2="3" y2="12" />
+            <line x1="21" y1="12" x2="23" y2="12" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        </button>
+        <button class="btn-icon" id="btnSettings" aria-label="Open settings" title="Settings">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!--SETTINGS DRAWER-->
+  <aside class="settings-drawer" id="settingsDrawer" aria-hidden="true">
+    <div class="settings-drawer__overlay" id="settingsOverlay"></div>
+    <div class="settings-drawer__panel">
+      <header class="settings-drawer__header">
+        <h2>Settings</h2>
+        <button class="btn-icon" id="btnSettingsClose" aria-label="Close settings">
+          &times;
+        </button>
+      </header>
+
+      <div class="settings-drawer__body">
+        <!-- Accent colour -->
+        <fieldset class="settings-group">
+          <legend>Accent Colour</legend>
+          <div class="colour-swatches" id="colourSwatches">
+            <button class="swatch" data-colour="#3b82f6" style="--sw: #3b82f6" aria-label="Blue"></button>
+            <button class="swatch" data-colour="#10b981" style="--sw: #10b981" aria-label="Emerald"></button>
+            <button class="swatch" data-colour="#6366f1" style="--sw: #6366f1" aria-label="Indigo"></button>
+            <button class="swatch" data-colour="#f59e0b" style="--sw: #f59e0b" aria-label="Amber"></button>
+            <button class="swatch" data-colour="#f43f5e" style="--sw: #f43f5e" aria-label="Rose"></button>
+            <button class="swatch" data-colour="#8b5cf6" style="--sw: #8b5cf6" aria-label="Violet"></button>
+            <button class="swatch" data-colour="#06b6d4" style="--sw: #06b6d4" aria-label="Cyan"></button>
+            <button class="swatch" data-colour="#a1a1aa" style="--sw: #a1a1aa" aria-label="Slate"></button>
+          </div>
+        </fieldset>
+
+        <!-- Font family -->
+        <fieldset class="settings-group">
+          <legend>Font</legend>
+          <select class="select" id="fontSelect">
+            <option value="'Inter', sans-serif">Inter</option>
+            <option value="'Outfit', sans-serif">Outfit</option>
+            <option value="system-ui, sans-serif">System Default</option>
+          </select>
+        </fieldset>
+
+        <!-- Background style -->
+        <fieldset class="settings-group">
+          <legend>Background Style</legend>
+          <select class="select" id="bgStyleSelect">
+            <option value="dynamic">Dynamic (weather-based)</option>
+            <option value="solid-dark">Solid Dark</option>
+            <option value="solid-light">Solid Light</option>
+            <option value="gradient">Gradient</option>
+          </select>
+        </fieldset>
+
+        <!-- Animations -->
+        <fieldset class="settings-group">
+          <legend>Animations</legend>
+          <label class="toggle-label">
+            <input type="checkbox" id="toggleAnimations" checked />
+            <span class="toggle-track"></span>
+            Enable weather animations
+          </label>
+        </fieldset>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main" id="mainContent">
+    <!-- LOADING SKELETON -->
+    <div class="skeleton-screen" id="skeletonScreen">
+      <div class="skeleton-hero">
+        <div class="skeleton-line skeleton-line--lg"></div>
+        <div class="skeleton-line skeleton-line--xl"></div>
+        <div class="skeleton-line skeleton-line--md"></div>
+      </div>
+      <div class="skeleton-grid">
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+      </div>
+    </div>
+
+    <!--  LIVE CONTENT (hidden until data loads) -->
+    <div class="live-content" id="liveContent" hidden>
+      <!-- HERO -->
+      <section class="hero" id="heroSection">
+        <div class="hero__icon" id="heroIcon" aria-hidden="true"></div>
+        <div class="hero__info">
+          <p class="hero__location" id="heroLocation">—</p>
+          <p class="hero__temp" id="heroTemp">--°</p>
+          <p class="hero__condition" id="heroCondition">—</p>
+          <p class="hero__range" id="heroRange">H: --° &nbsp; L: --°</p>
+        </div>
+        <p class="hero__quote" id="heroQuote"></p>
+        <div class="hero__actions">
+          <button class="btn-pill" id="btnFavourite" aria-label="Save to favourites">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <path
+                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" />
+            </svg>
+            <span>Save</span>
+          </button>
+          <button class="btn-pill" id="btnShare" aria-label="Share weather">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3" />
+              <circle cx="6" cy="12" r="3" />
+              <circle cx="18" cy="19" r="3" />
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+            </svg>
+            <span>Share</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- FAVOURITES BAR -->
+      <section class="favourites-bar" id="favouritesBar" hidden>
+        <h3 class="section-label">Saved Locations</h3>
+        <div class="favourites-bar__list" id="favouritesList"></div>
+      </section>
+
+      <!-- WEATHER ALERTS -->
+      <section class="alerts" id="alertsSection" hidden>
+        <h3 class="section-label">⚠️ Weather Alerts</h3>
+        <div class="alerts__list" id="alertsList"></div>
+      </section>
+
+      <!-- DETAIL CARDS -->
+      <section class="details-grid" id="detailsGrid">
+        <div class="detail-card" id="cardFeelsLike">
+          <span class="detail-card__label">Feels Like</span>
+          <span class="detail-card__value" id="valFeelsLike">--°</span>
+        </div>
+        <div class="detail-card" id="cardHumidity">
+          <span class="detail-card__label">Humidity</span>
+          <span class="detail-card__value" id="valHumidity">--%</span>
+        </div>
+        <div class="detail-card" id="cardWind">
+          <span class="detail-card__label">Wind</span>
+          <span class="detail-card__value" id="valWind">-- km/h</span>
+          <span class="detail-card__sub" id="valWindDir"></span>
+        </div>
+        <div class="detail-card" id="cardUV">
+          <span class="detail-card__label">UV Index</span>
+          <span class="detail-card__value" id="valUV">--</span>
+          <span class="detail-card__sub" id="valUVLabel"></span>
+        </div>
+        <div class="detail-card" id="cardVisibility">
+          <span class="detail-card__label">Visibility</span>
+          <span class="detail-card__value" id="valVisibility">-- km</span>
+        </div>
+        <div class="detail-card" id="cardPressure">
+          <span class="detail-card__label">Pressure</span>
+          <span class="detail-card__value" id="valPressure">-- hPa</span>
+        </div>
+        <div class="detail-card" id="cardSunrise">
+          <span class="detail-card__label">Sunrise</span>
+          <span class="detail-card__value" id="valSunrise">--:--</span>
+        </div>
+        <div class="detail-card" id="cardSunset">
+          <span class="detail-card__label">Sunset</span>
+          <span class="detail-card__value" id="valSunset">--:--</span>
+        </div>
+        <div class="detail-card" id="cardClouds">
+          <span class="detail-card__label">Clouds</span>
+          <span class="detail-card__value" id="valClouds">--%</span>
+        </div>
+        <div class="detail-card" id="cardAQI">
+          <span class="detail-card__label">Air Quality</span>
+          <span class="detail-card__value" id="valAQI">--</span>
+          <span class="detail-card__sub" id="valAQILabel"></span>
+        </div>
+      </section>
+
+      <!-- HOURLY FORECAST -->
+      <section class="forecast-section" id="hourlySection">
+        <h3 class="section-label">Hourly Forecast</h3>
+        <div class="hourly-scroll" id="hourlyScroll"></div>
+      </section>
+
+      <!-- 7-DAY FORECAST -->
+      <section class="forecast-section" id="dailySection">
+        <h3 class="section-label">7-Day Forecast</h3>
+        <div class="daily-list" id="dailyList"></div>
+      </section>
+
+      <!-- TEMPERATURE CHART -->
+      <section class="chart-section" id="chartSection">
+        <h3 class="section-label">Temperature Trend</h3>
+        <div class="chart-wrapper">
+          <canvas id="tempChart"></canvas>
+        </div>
+      </section>
+
+      <!-- MAP -->
+      <section class="map-section" id="mapSection">
+        <h3 class="section-label">Interactive Map</h3>
+        <p class="section-hint">
+          Click anywhere on the map to check weather at that location.
+        </p>
+        <div class="map-container" id="mapContainer"></div>
+      </section>
+    </div>
+    <!-- /liveContent -->
+  </main>
+
+  <!-- FOOTER-->
+  <footer>
+    <p>Crafted with precision by <span>Tapobrata</span> ❤️</p>
+  </footer>
+
+  <!-- Scripts (order matters: config → app) -->
+  <script src="config.js"></script>
+  <script src="script.js" defer></script>
+</body>
+
+</html>
