@@ -30,7 +30,7 @@
 
   /* ──────────────────────────────────────────────────────────────────
        DOM REFERENCES
-       ────────────────────────────────────────────────────────────────── */
+      -*/
   const $ = (id) => document.getElementById(id);
   const dom = {
     body: document.documentElement,
@@ -280,46 +280,62 @@
     return response.json();
   }
 
-  // WeatherAPI forecast (includes current + hourly + daily + AQI + astro)
+ // 1. Updated fetchWeatherData function
   async function fetchWeatherData(lat, lon) {
-    const url = `${CONFIG.WEATHERAPI_BASE}/forecast.json?key=${CONFIG.WEATHERAPI_KEY}&q=${lat},${lon}&days=7&aqi=yes`;
+    // Direct API call er bodole amader secure netlify function ke call korchi
+    const url = `/.netlify/functions/api?endpoint=forecast.json&q=${lat},${lon}`;
     return fetchJSON(url);
   }
 
-  // Search/autocomplete cities
+  // Hardcoded coordinates for small towns not in WeatherAPI's search database
+  const SMALL_TOWN_LOOKUP = {
+    "tarapith": { name: "Tarapith", lat: 24.05, lon: 87.88, country: "India", state: "West Bengal" },
+    "rampurhat": { name: "Rampurhat", lat: 24.17, lon: 87.78, country: "India", state: "West Bengal" },
+    "suri": { name: "Suri", lat: 23.91, lon: 87.53, country: "India", state: "West Bengal" },
+    "siuri": { name: "Siuri", lat: 23.91, lon: 87.53, country: "India", state: "West Bengal" },
+    "bolpur": { name: "Bolpur", lat: 23.67, lon: 87.72, country: "India", state: "West Bengal" },
+    "santiniketan": { name: "Santiniketan", lat: 23.68, lon: 87.69, country: "India", state: "West Bengal" },
+    "nalhati": { name: "Nalhati", lat: 24.29, lon: 87.82, country: "India", state: "West Bengal" },
+    "sainthia": { name: "Sainthia", lat: 23.95, lon: 87.67, country: "India", state: "West Bengal" },
+    "dubrajpur": { name: "Dubrajpur", lat: 23.80, lon: 87.38, country: "India", state: "West Bengal" },
+    "massanjore": { name: "Massanjore", lat: 24.25, lon: 87.00, country: "India", state: "Jharkhand" },
+  };
+
+  // 2. Updated geocodeCity function
   async function geocodeCity(query) {
-  const url = `https://nominatim.openstreetmap.org/search?` +
-    `q=${encodeURIComponent(query)}` +
-    `&format=json` +
-    `&limit=8` +
-    `&addressdetails=1` +
-    `&featuretype=settlement`;
+    // Search er jonno amader secure netlify function ke call korchi
+    const url = `/.netlify/functions/api?endpoint=search.json&q=${encodeURIComponent(query)}`;
+    let results = [];
 
-  const response = await fetch(url, {
-    headers: {
-      "Accept-Language": "en",
-      "User-Agent": "WeatherApp/1.0"
+    try {
+      const apiResults = await fetchJSON(url);
+      const resultArray = Array.isArray(apiResults) ? apiResults : [];
+      
+      results = resultArray.map(r => ({
+        name: r.name,
+        lat: r.lat,
+        lon: r.lon,
+        country: r.country,
+        state: r.region || "",
+      }));
+    } catch (e) {
+      console.warn("Search failed via proxy:", e);
     }
-  });
 
-  if (!response.ok) throw new Error("Geocoding failed");
-
-  const results = await response.json();
-
-  return results
-    .filter(r => r.lat && r.lon)
-    .map(r => ({
-      name: r.address?.city
-        || r.address?.town
-        || r.address?.village
-        || r.address?.hamlet
-        || r.name,
-      lat: parseFloat(r.lat),
-      lon: parseFloat(r.lon),
-      country: r.address?.country || "",
-      state: r.address?.state || r.address?.county || "",
-    }));
-}
+    if (results.length === 0) {
+      const q = query.toLowerCase().trim();
+      if (SMALL_TOWN_LOOKUP[q]) {
+        results.push(SMALL_TOWN_LOOKUP[q]);
+      } else {
+        Object.values(SMALL_TOWN_LOOKUP).forEach(town => {
+          if (town.name.toLowerCase().startsWith(q) || q.startsWith(town.name.toLowerCase())) {
+            results.push(town);
+          }
+        });
+      }
+    }
+    return results;
+  }
 
   // Map WeatherAPI condition code to our icon codes (01d/01n style)
   function mapConditionToIcon(code, isDay) {
@@ -409,8 +425,8 @@
     $("valSunset").textContent = formatTimeStr(todayAstro.sunset);
     $("valClouds").textContent = current.cloud + "%";
 
-    // UV — WeatherAPI includes UV in current data
-    $("valUV").textContent = current.uv || "--";
+    // UV — WeatherAPI includes UV in current data (0 at night is normal)
+    $("valUV").textContent = current.uv != null ? current.uv : "0";
     $("valUVLabel").textContent = current.uv ? uvLabel(current.uv) : "";
 
     // AQI — WeatherAPI includes air_quality in current data
