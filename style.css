@@ -1,6 +1,8 @@
-/* Weathe App - CSS
-Designed By Tapobrata */
+/* 
+   Weather App — Design System & Styles
+   Author: Tapobrata Biswas */
 
+/* Reset  */
 *,
 *::before,
 *::after {
@@ -60,7 +62,7 @@ svg {
   max-width: none !important;
 }
 
-/* ── CSS Custom Properties (Dark Theme — Default) --- */
+/*      CSS Custom Properties (Dark Theme — Default)                                            */
 :root {
   /* Accent (overridable) */
   --accent: #3b82f6;
@@ -96,7 +98,7 @@ svg {
   --transition-fast: 0.15s ease;
 }
 
-/* ── Light theme overrides ---- */
+/*Light theme overrides */
 [data-theme="light"] {
   --bg-primary: #fafaf9;
   --bg-secondary: #ffffff;
@@ -113,7 +115,7 @@ svg {
   --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.09);
 }
 
-/* ── Global ----- */
+/* Global */
 body {
   font-family: var(--font);
   color: var(--text-primary);
@@ -126,9 +128,7 @@ body {
   position: relative;
 }
 
-/*  
-   DYNAMIC WEATHER BACKGROUNDS
-     */
+/*   DYNAMIC WEATHER BACKGROUNDS*/
 
 /* Base gradient behind everything */
 [data-condition="clear-day"] {
@@ -194,9 +194,9 @@ body {
   background: linear-gradient(135deg, var(--accent), #09090b) !important;
 }
 
-/*  
+/*   
    WEATHER BG EFFECTS (rain, stars)
-     */
+      */
 .weather-bg-effects {
   position: fixed;
   inset: 0;
@@ -285,9 +285,9 @@ body {
   display: none !important;
 }
 
-/*  
+/*   
    TOAST NOTIFICATION
-     */
+      */
 .toast-container {
   position: fixed;
   top: calc(var(--navbar-h) + 12px);
@@ -333,7 +333,7 @@ body {
   }
 }
 
-/*  Premium Glass Navbar ------ */
+/* ─Glass Navbar ─ */
 
 .navbar {
   position: sticky;
@@ -414,7 +414,7 @@ body {
   flex-shrink: 0;
 }
 
-/* ── Icon Button --- */
+/* ── Icon Button ── */
 .btn-icon {
   width: 38px;
   height: 38px;
@@ -444,6 +444,7 @@ body {
 }
 
 /* Theme toggle icon visibility */
+
 [data-theme="dark"] .icon-moon {
   display: none;
 }
@@ -452,9 +453,9 @@ body {
   display: none;
 }
 
-/*  
+/*   
    SEARCH
-     */
+      */
 .search {
   flex: 1;
   max-width: 420px;
@@ -558,9 +559,7 @@ body {
   font-size: 0.8rem;
 }
 
-/*  
-   SETTINGS DRAWER
-     */
+/*SETTINGS DRAWER*/
 .settings-drawer {
   position: fixed;
   inset: 0;
@@ -734,9 +733,9 @@ body {
   transform: translateX(20px);
 }
 
-/*  
+/*   
    MAIN
-     */
+      */
 .main {
   position: relative;
   z-index: 1;
@@ -746,7 +745,7 @@ body {
   min-height: calc(100vh - var(--navbar-h) - 80px);
 }
 
-/* ── Skeleton Loader ── */
+/*  Skeleton Loader  */
 .skeleton-screen {
   animation: fadeIn 0.3s ease;
 }
@@ -804,7 +803,7 @@ body {
   }
 }
 
-/* ── Live Content Fade-in ───*/
+/*  Live Content Fade-in  */
 .live-content {
   animation: fadeInUp 0.5s ease;
 }
@@ -831,9 +830,7 @@ body {
   }
 }
 
-/*  
-   HERO SECTION
-     */
+/*HERO SECTION */
 .hero {
   text-align: center;
   padding: 36px 0 32px;
@@ -917,15 +914,6 @@ body {
   margin-top: 18px;
 }
 
-.hero__sun-emoji {
-  font-size: 2.8rem;
-  line-height: 1;
-  margin-bottom: 2px;
-  animation: floatIcon 3s ease-in-out infinite;
-  display: inline-block;
-  filter: drop-shadow(0 4px 12px rgba(251, 191, 36, 0.4));
-}
-
 /* Pill button */
 .btn-pill {
   display: inline-flex;
@@ -958,9 +946,8 @@ body {
   stroke: #ef4444;
 }
 
-/*  
-   FAVOURITES BAR
-     */
+/* FAVOURITES BAR*/
+
 .favourites-bar {
   margin-bottom: 24px;
 }
@@ -1003,9 +990,7 @@ body {
   opacity: 1;
 }
 
-/*  
-   ALERTS
-     */
+/*  ALERTS*/
 .alerts {
   margin-bottom: 24px;
 }
@@ -1030,7 +1015,7 @@ body {
   line-height: 1.5;
 }
 
- /* SECTION LABELS */
+/* SECTION LABELS*/
 
 .section-label {
   font-size: 0.95rem;
@@ -1049,8 +1034,7 @@ body {
   margin-bottom: 12px;
 }
 
-/* DETAIL CARDS GRID */
-
+/* DETAIL CARDS GRID*/
 .details-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -1099,8 +1083,7 @@ body {
   color: var(--text-secondary);
 }
 
-/* HOURLY FORECAST */
-
+/*  HOURLY FORECAST */
 .forecast-section {
   margin-bottom: 32px;
 }
@@ -1178,8 +1161,7 @@ body {
   border-color: rgba(var(--accent-rgb), 0.3);
 }
 
-/* 7-DAY FORECAST */
-
+/* 7-DAY FORECAST*/
 .daily-list {
   display: flex;
   flex-direction: column;
@@ -1238,8 +1220,7 @@ body {
   margin-left: 6px;
 }
 
-/* CHART */
-
+/*CHART */
 .chart-section {
   margin-bottom: 32px;
 }
@@ -1259,9 +1240,7 @@ body {
   height: 100% !important;
 }
 
-
-   /* MAP */
-
+/* MAP */
 .map-section {
   margin-bottom: 32px;
 }
@@ -1273,7 +1252,7 @@ body {
   border: 1px solid var(--bg-glass-border);
 }
 
-/* ─── Premium Footer ──*/
+/*Footer */
 
 footer {
   margin-top: 60px;
@@ -1303,14 +1282,17 @@ footer span {
   font-weight: 600;
 }
 
-
-   /* RESPONSIVE */
+/* RESPONSIVE*/
 
 /* Tablet & smaller */
 @media (max-width: 768px) {
+  .navbar {
+    padding: 12px 16px;
+  }
+
   .navbar__inner {
-    padding: 0 14px;
-    gap: 10px;
+    padding: 0;
+    gap: 12px;
   }
 
   .navbar__title {
@@ -1348,12 +1330,48 @@ footer span {
 /* Mobile */
 @media (max-width: 480px) {
   :root {
-    --navbar-h: 56px;
+    --navbar-h: 60px;
   }
 
+  .navbar {
+    padding: 10px 0;
+     }
+
+  .navbar__inner {
+    padding: 0 16px;
+    gap: 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  
+  .navbar__inner::-webkit-scrollbar {
+    display: none;
+  }
+
+  .navbar__logo {
+    display: none;
+  }
+
+  .search {
+    min-width: 200px;
+    flex-shrink: 0;
+  }
+
+  .search__input-group {
+    padding: 0 12px;
+    height: 38px;
+  }
+
+  .navbar__controls {
+    gap: 10px;
+    flex-shrink: 0;
+    padding-right: 16px;
+     }
+
   .navbar__controls .btn-icon {
-    width: 34px;
-    height: 34px;
+    width: 36px;
+    height: 36px;
   }
 
   .btn-icon svg {
@@ -1417,7 +1435,7 @@ footer span {
   }
 }
 
-/* ── Reduced motion ------------------------------------─── */
+/*  Reduced motion  */
 @media (prefers-reduced-motion: reduce) {
 
   *,
@@ -1427,7 +1445,8 @@ footer span {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
- .weather-bg-effects{
-    display: none !important;
- }
+
+  .weather-bg-effects {
+    display: none;
+  }
 }
