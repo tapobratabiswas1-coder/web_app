@@ -1,8 +1,9 @@
-/* 
+/* ═══════════════════════════════════════════════════════════════════════
    Weather App — Design System & Styles
-   Author: Tapobrata Biswas */
+   Author: Tapobrata
+   ═══════════════════════════════════════════════════════════════════════ */
 
-/* Reset  */
+/*      Reset                                         ───────────────────────────────────────   */
 *,
 *::before,
 *::after {
@@ -333,7 +334,7 @@ body {
   }
 }
 
-/* ─Glass Navbar ─ */
+/* ─── Premium Glass Navbar ───────────────────────────── */
 
 .navbar {
   position: sticky;
@@ -414,7 +415,7 @@ body {
   flex-shrink: 0;
 }
 
-/* ── Icon Button ── */
+/* ── Icon Button ────────────────────────────────────────────────────── */
 .btn-icon {
   width: 38px;
   height: 38px;
@@ -444,7 +445,6 @@ body {
 }
 
 /* Theme toggle icon visibility */
-
 [data-theme="dark"] .icon-moon {
   display: none;
 }
@@ -559,7 +559,9 @@ body {
   font-size: 0.8rem;
 }
 
-/*SETTINGS DRAWER*/
+/*   
+   SETTINGS DRAWER
+      */
 .settings-drawer {
   position: fixed;
   inset: 0;
@@ -745,7 +747,7 @@ body {
   min-height: calc(100vh - var(--navbar-h) - 80px);
 }
 
-/*  Skeleton Loader  */
+/* ── Skeleton Loader ────────────────────────────────────────────────── */
 .skeleton-screen {
   animation: fadeIn 0.3s ease;
 }
@@ -803,7 +805,7 @@ body {
   }
 }
 
-/*  Live Content Fade-in  */
+/* ── Live Content Fade-in ───────────────────────────────────────────── */
 .live-content {
   animation: fadeInUp 0.5s ease;
 }
@@ -830,7 +832,9 @@ body {
   }
 }
 
-/*HERO SECTION */
+/*   
+   HERO SECTION
+      */
 .hero {
   text-align: center;
   padding: 36px 0 32px;
@@ -946,8 +950,9 @@ body {
   stroke: #ef4444;
 }
 
-/* FAVOURITES BAR*/
-
+/*   
+   FAVOURITES BAR
+      */
 .favourites-bar {
   margin-bottom: 24px;
 }
@@ -990,7 +995,9 @@ body {
   opacity: 1;
 }
 
-/*  ALERTS*/
+/*   
+   ALERTS
+      */
 .alerts {
   margin-bottom: 24px;
 }
@@ -1015,8 +1022,9 @@ body {
   line-height: 1.5;
 }
 
-/* SECTION LABELS*/
-
+/*   
+   SECTION LABELS
+      */
 .section-label {
   font-size: 0.95rem;
   font-weight: 800;
@@ -1034,7 +1042,9 @@ body {
   margin-bottom: 12px;
 }
 
-/* DETAIL CARDS GRID*/
+/*   
+   DETAIL CARDS GRID
+      */
 .details-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -1083,7 +1093,9 @@ body {
   color: var(--text-secondary);
 }
 
-/*  HOURLY FORECAST */
+/*   
+   HOURLY FORECAST
+      */
 .forecast-section {
   margin-bottom: 32px;
 }
@@ -1161,7 +1173,9 @@ body {
   border-color: rgba(var(--accent-rgb), 0.3);
 }
 
-/* 7-DAY FORECAST*/
+/*   
+   7-DAY FORECAST
+      */
 .daily-list {
   display: flex;
   flex-direction: column;
@@ -1220,7 +1234,9 @@ body {
   margin-left: 6px;
 }
 
-/*CHART */
+/*   
+   CHART
+      */
 .chart-section {
   margin-bottom: 32px;
 }
@@ -1240,7 +1256,9 @@ body {
   height: 100% !important;
 }
 
-/* MAP */
+/*   
+   MAP
+      */
 .map-section {
   margin-bottom: 32px;
 }
@@ -1252,7 +1270,7 @@ body {
   border: 1px solid var(--bg-glass-border);
 }
 
-/*Footer */
+/* ─── Premium Footer ────────────────────────────   */
 
 footer {
   margin-top: 60px;
@@ -1335,16 +1353,19 @@ footer span {
 
   .navbar {
     padding: 10px 0;
-     }
+    /* Scroll jate ekdom edge theke shuru hoy */
+  }
 
   .navbar__inner {
     padding: 0 16px;
     gap: 12px;
     overflow-x: auto;
+    /* 🔥 Ei property tai horizontal slide korabe */
     -webkit-overflow-scrolling: touch;
+    /* iOS e smooth swipe er jonno */
   }
 
-  
+  /* 🔥 Scrollbar hide kora holo premium look er jonno */
   .navbar__inner::-webkit-scrollbar {
     display: none;
   }
@@ -1355,7 +1376,9 @@ footer span {
 
   .search {
     min-width: 200px;
+    /* Search bar ektu boro ar fixed rakha holo */
     flex-shrink: 0;
+    /* Shrink hote dewa hobe na */
   }
 
   .search__input-group {
@@ -1366,8 +1389,10 @@ footer span {
   .navbar__controls {
     gap: 10px;
     flex-shrink: 0;
+    /* Icon gulo jate screen choto hole squish na hoy */
     padding-right: 16px;
-     }
+    /* Sesh icon tar pore ektu breathing space */
+  }
 
   .navbar__controls .btn-icon {
     width: 36px;
